@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  /* Figma "Main Container" 1:1383 — body copy is Inter, display type is Bebas Neue */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bebas Neue", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+  There is deliberately no global reset here. Tailwind's Preflight already sets
+  margin, padding and box-sizing on every element, and an unlayered universal
+  rule outranks Tailwind's layered utilities, silently collapsing all spacing.
+*/
+body {
+  overflow-x: hidden;
+}
