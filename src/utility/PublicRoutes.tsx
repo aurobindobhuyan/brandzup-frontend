@@ -5,8 +5,10 @@ import { useUser } from "../context/UserContext";
 type RedirectState = { from?: { pathname?: string } } | null;
 
 const PublicRoutes = ({ children }: { children: ReactNode }) => {
-  const { user } = useUser();
+  const { user, initializing } = useUser();
   const location = useLocation();
+
+  if (initializing) return <h1>Loading...</h1>;
 
   if (user) {
     const from = (location.state as RedirectState)?.from?.pathname ?? "/";

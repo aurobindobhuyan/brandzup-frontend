@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 const Layout = () => {
-  const { user, setUser } = useUser();
+  const { user, logOut } = useUser();
 
   return (
     <div>
@@ -10,7 +10,7 @@ const Layout = () => {
         <span>Header</span>
         <span className="flex items-center gap-4">
           {user?.email}
-          <button type="button" onClick={() => setUser(null)}>
+          <button type="button" onClick={logOut}>
             Sign out
           </button>
         </span>

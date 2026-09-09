@@ -3,11 +3,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
 import ProtectedRoutes from "./utility/ProtectedRoutes";
 import PublicRoutes from "./utility/PublicRoutes";
+import RequireWorkspace from "./utility/RequireWorkspace";
 
 const Layout = lazy(() => (import("./pages/Layout")));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const SelectWorkspace = lazy(() => import("./pages/SelectWorkspace"));
 
 function App() {
   const router = createBrowserRouter([
@@ -15,7 +17,9 @@ function App() {
       path: "/",
       element: (
         <ProtectedRoutes>
-          <Layout />
+          <RequireWorkspace>
+            <Layout />
+          </RequireWorkspace>
         </ProtectedRoutes>
       ),
       children: [
@@ -24,6 +28,14 @@ function App() {
           element: <Dashboard />
         }
       ]
+    },
+    {
+      path: "/select-workspace",
+      element: (
+        <ProtectedRoutes>
+          <SelectWorkspace />
+        </ProtectedRoutes>
+      ),
     },
     {
       path: "/login",
