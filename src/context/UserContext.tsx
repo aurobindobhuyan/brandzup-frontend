@@ -8,11 +8,54 @@ import {
 } from "react";
 import { fetchRequest } from "../components/fetchRequets";
 
+export enum IInviteStatusKind {
+  notRequired = "NotRequired",
+  pending = "Pending",
+  accepted = "Accepted",
+  rejected = "Rejected",
+}
+
+export interface IInvite {
+  token?: string;
+  status: IInviteStatusKind;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IEntityAccess {
+  entityId: string;
+  userType: string;
+}
+
+export interface IBrandAccess extends IEntityAccess {
+  fullBrandAccess: Boolean;
+}
+
+export interface IGuidelineAccess extends IEntityAccess {
+  brandId: string;
+}
+
+export interface IPermission {
+  userId: string;
+  workspaceNanoId: string;
+
+  access: {
+    fullWorkspaceAccess?: boolean;
+    userType: string;
+    brandAccess?: IBrandAccess[];
+    guidelineAccess?: IGuidelineAccess[];
+  };
+
+  invite: IInvite;
+
+  isDeleted: boolean;
+}
+
 export interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-  profilePic: string;
+  userId: string;
+  workspaceId?: null | string;
+  permission?: null | IPermission;
 }
 
 type User = IUser | null;
@@ -22,7 +65,7 @@ type UserContextType = {
   setUser: (user: User) => void;
   initializing: boolean;
   refreshSession: () => Promise<void>;
-  logOut: () => void;
+  logOut: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);

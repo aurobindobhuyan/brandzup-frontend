@@ -1,4 +1,6 @@
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
+import { apiBaseUrl } from "../utility/origin";
+
+const BASE_URL = apiBaseUrl();
 
 export const METHOD = {
   GET: "GET",

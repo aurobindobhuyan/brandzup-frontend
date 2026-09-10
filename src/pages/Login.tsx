@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
-import { useUser, type IUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import { fetchRequest } from "../components/fetchRequets";
 
 type Errors = {
@@ -16,7 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
-  const { setUser } = useUser();
+  const { setUser, refreshSession } = useUser();
 
   const validate = (): Errors => {
     const next: Errors = {};
@@ -46,7 +46,7 @@ const Login = () => {
 
     setSubmitting(true);
     try {
-      const response = await fetchRequest<IUser>({
+      const response = await fetchRequest({
         url: "/user/login",
         body: { email, password },
         method: "POST",
@@ -58,7 +58,9 @@ const Login = () => {
         return;
       }
 
-      setUser(response.data);
+      // /user/me is the source of truth for the session shape; the login
+      // response is the user document, not the session.
+      await refreshSession();
     } finally {
       setSubmitting(false);
     }

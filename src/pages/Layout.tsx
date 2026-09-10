@@ -1,15 +1,23 @@
 import { Outlet } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { rootOrigin } from "../utility/origin";
 
 const Layout = () => {
-  const { user, logOut } = useUser();
+  const { logOut } = useUser();
 
   return (
     <div>
       <header className="flex items-center justify-between bg-green-300 px-10">
         <span>Header</span>
         <span className="flex items-center gap-4">
-          {user?.email}
+          <button
+            type="button"
+            onClick={() =>
+              window.location.assign(`${rootOrigin()}/select-workspace`)
+            }
+          >
+            Switch workspace
+          </button>
           <button type="button" onClick={logOut}>
             Sign out
           </button>
