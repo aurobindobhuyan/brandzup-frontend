@@ -1,7 +1,6 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
-import { useUser } from "../context/UserContext";
 import { fetchRequest } from "../components/fetchRequets";
 
 type Errors = {
@@ -20,7 +19,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
-  const { setUser } = useUser();
 
   const validate = (): Errors => {
     const next: Errors = {};

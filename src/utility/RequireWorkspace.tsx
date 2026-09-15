@@ -1,13 +1,11 @@
 import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { getCurrentWorkspaceNanoId } from "./workspace";
+import { useUser } from "../context/UserContext";
 
-/**
- * The dashboard is the home page of a workspace host. Reaching it on the root
- * host means no workspace is selected, so send them to the picker.
- */
 const RequireWorkspace = ({ children }: { children: ReactNode }) => {
-  if (!getCurrentWorkspaceNanoId()) {
+  const { user } = useUser();
+
+  if (!user?.workspaceId) {
     return <Navigate to="/select-workspace" replace />;
   }
 
