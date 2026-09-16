@@ -4,6 +4,7 @@ import { UserProvider } from "./context/UserContext";
 import ProtectedRoutes from "./utility/ProtectedRoutes";
 import PublicRoutes from "./utility/PublicRoutes";
 import RequireWorkspace from "./utility/RequireWorkspace";
+import RootHostOnly from "./utility/RootHostOnly";
 import ConsumeToken from "./pages/workspace/ConsumeToken";
 
 const Layout = lazy(() => import("./pages/Layout"));
@@ -32,7 +33,11 @@ function App() {
         },
         {
           path: "/select-workspace",
-          element: <SelectWorkspace />,
+          element: (
+            <RootHostOnly>
+              <SelectWorkspace />
+            </RootHostOnly>
+          ),
         },
       ],
     },
@@ -43,17 +48,21 @@ function App() {
     {
       path: "/login",
       element: (
-        <PublicRoutes>
-          <Login />
-        </PublicRoutes>
+        <RootHostOnly>
+          <PublicRoutes>
+            <Login />
+          </PublicRoutes>
+        </RootHostOnly>
       ),
     },
     {
       path: "/register",
       element: (
-        <PublicRoutes>
-          <Register />
-        </PublicRoutes>
+        <RootHostOnly>
+          <PublicRoutes>
+            <Register />
+          </PublicRoutes>
+        </RootHostOnly>
       ),
     },
     {
