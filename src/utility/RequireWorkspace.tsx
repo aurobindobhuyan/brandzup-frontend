@@ -1,14 +1,24 @@
 import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { getCurrentWorkspaceNanoId } from "./workspace";
+import { useUser } from "../context/UserContext";
+import { getHostWorkspaceId } from "./host";
+import { RootRedirect } from "./RootHostOnly";
 
 /**
- * The dashboard is the home page of a workspace host. Reaching it on the root
- * host means no workspace is selected, so send them to the picker.
+ * Workspace pages only render on their own host (company.<id>.localhost).
+ * On the root host, or on a host that is not the session's current workspace,
+ * the user goes back to workspace selection on the root host.
  */
 const RequireWorkspace = ({ children }: { children: ReactNode }) => {
-  if (!getCurrentWorkspaceNanoId()) {
+  const { user } = useUser();
+  const hostWorkspaceId = getHostWorkspaceId();
+
+  if (!hostWorkspaceId) {
     return <Navigate to="/select-workspace" replace />;
+  }
+
+  if (user?.workspaceId !== hostWorkspaceId) {
+    return <RootRedirect to="/select-workspace" />;
   }
 
   return children;

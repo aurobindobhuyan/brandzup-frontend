@@ -15,5 +15,13 @@ export default defineConfig({
     allowedHosts: true,
     cors: true,
     strictPort: false,
+    // Same-origin API: cookies the gateway sets land on the page's own host
+    // (localhost vs company.<id>.localhost), which the session model relies on.
+    proxy: {
+      "/api": {
+        target: "http://localhost:7000",
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
 });

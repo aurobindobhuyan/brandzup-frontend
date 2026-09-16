@@ -4,12 +4,14 @@ import { UserProvider } from "./context/UserContext";
 import ProtectedRoutes from "./utility/ProtectedRoutes";
 import PublicRoutes from "./utility/PublicRoutes";
 import RequireWorkspace from "./utility/RequireWorkspace";
+import RootHostOnly from "./utility/RootHostOnly";
+import ConsumeToken from "./pages/workspace/ConsumeToken";
 
-const Layout = lazy(() => (import("./pages/Layout")));
+const Layout = lazy(() => import("./pages/Layout"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
-const SelectWorkspace = lazy(() => import("./pages/SelectWorkspace"));
+const SelectWorkspace = lazy(() => import("./pages/workspace/SelectWorkspace"));
 
 function App() {
   const router = createBrowserRouter([
@@ -17,40 +19,50 @@ function App() {
       path: "/",
       element: (
         <ProtectedRoutes>
-          <RequireWorkspace>
-            <Layout />
-          </RequireWorkspace>
+          <Layout />
         </ProtectedRoutes>
       ),
       children: [
         {
           index: true,
-          element: <Dashboard />
-        }
-      ]
+          element: (
+            <RequireWorkspace>
+              <Dashboard />
+            </RequireWorkspace>
+          ),
+        },
+        {
+          path: "/select-workspace",
+          element: (
+            <RootHostOnly>
+              <SelectWorkspace />
+            </RootHostOnly>
+          ),
+        },
+      ],
     },
     {
-      path: "/select-workspace",
-      element: (
-        <ProtectedRoutes>
-          <SelectWorkspace />
-        </ProtectedRoutes>
-      ),
+      path: "/auth/consume",
+      element: <ConsumeToken />,
     },
     {
       path: "/login",
       element: (
-        <PublicRoutes>
-          <Login />
-        </PublicRoutes>
+        <RootHostOnly>
+          <PublicRoutes>
+            <Login />
+          </PublicRoutes>
+        </RootHostOnly>
       ),
     },
     {
       path: "/register",
       element: (
-        <PublicRoutes>
-          <Register />
-        </PublicRoutes>
+        <RootHostOnly>
+          <PublicRoutes>
+            <Register />
+          </PublicRoutes>
+        </RootHostOnly>
       ),
     },
     {

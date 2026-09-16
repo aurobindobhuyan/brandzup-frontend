@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { getHostWorkspaceId } from "./host";
+import { RootRedirect } from "./RootHostOnly";
 
 const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
   const { user, initializing } = useUser();
@@ -11,6 +13,9 @@ const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
   if (initializing) return <h1>Loading...</h1>;
 
   if (!user) {
+    // Workspace hosts have no login page; sign in happens on the root host.
+    if (getHostWorkspaceId()) return <RootRedirect to="/login" />;
+
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
